@@ -379,12 +379,12 @@
   "pcbnew": {
     "last_paths": {
       "gencad": "",
-      "idf": "",
+      "idf": "malenki-1616-3A.emn",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "malenki-1616-3A.step",
       "vmrl": "",
-      "vrml": ""
+      "vrml": "malenki-1616-3A.wrl"
     },
     "page_layout_descr_file": ""
   },
