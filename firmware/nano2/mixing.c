@@ -17,6 +17,10 @@ void mixing_init()
     mixing_state.enable_mixing = true;
     mixing_state.enable_braking = true;
     mixing_state.swap_weapon_channels = true;
+    // Invert left channel by default so it runs the opposite way to
+    // right - this is what people expect - so they can wire them the
+    // "same" way, and have the robot drive normally.
+    mixing_state.invert_left = true;
 }
 
 static int signedclamp(int n, int maxval)
@@ -99,9 +103,10 @@ void mixing_drive_motors(int16_t throttle, int16_t steering, int16_t weapon, boo
         // Apply "squaring"
         squaring(&throttle,100);
         squaring(&steering,100);
-        // Scale steering further, to stop steering too fast.
-        steering = steering / 2;
-        
+        if (! mixing_state.enable_max_steering) {
+            // Scale steering further, to stop steering too fast.
+            steering = steering / 2;
+        }
         left = throttle + steering;   
         right = throttle - steering;
     } else {
