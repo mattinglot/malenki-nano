@@ -1,0 +1,11 @@
+# copy-paste this file into your project repo and rename to docker-compose.yml
+# modify as necessary
+version: '3.8'
+services:
+  avrdocker:
+    image: mattinglot/avrdocker:latest
+    container_name: avrdocker
+    volumes:
+      - ./firmware:/usr/src/avr/project  # Adjust './src' to the path of your AVR project source code relative to repo
+    working_dir: /usr/src/avr/project
+    command: tail -f /dev/null  # Adjust if you need to run something else on startup
