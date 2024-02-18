@@ -26,14 +26,30 @@ void nvconfig_load()
 {
     nvconfig_layout nvdata;
 
+    diag_println("Attempting to load config from eeprom");
+
     eeprom_read_block((void *) &nvdata, eeprom_addr, sizeof(nvdata));
-    if (nvdata.magic == NVCONFIG_MAGIC) {
+    if (nvdata.magic == NVCONFIG_MAGIC) {        
         // Great.
         // Copy the config data.
         memcpy(radio_state.tx_id, nvdata.tx_id, 4);
         memcpy(radio_state.hop_channels, nvdata.hop_channels, NR_HOP_CHANNELS);
         memcpy(&mixing_state, &nvdata.mixing_state, sizeof(mixing_state));
-    } // otherwise, invalid nvconfig.
+
+        diag_println("Loaded config from eeprom:");
+        diag_println("mixing_state.invert_left: %s", (mixing_state.invert_left ? "true" : "false") );
+        diag_println("mixing_state.invert_right: %s", mixing_state.invert_right ? "true:" : "false" );
+        diag_println("mixing_state.invert_weapon: %s", mixing_state.invert_weapon ? "true:" : "false" );
+        diag_println("mixing_state.enable_mixing: %s", mixing_state.enable_mixing ? "true:" : "false" );
+        diag_println("mixing_state.swap_weapon_channels: %s", mixing_state.swap_weapon_channels ? "true:" : "false" );
+        diag_println("mixing_state.enable_braking: %s", mixing_state.enable_braking ? "true:" : "false" );
+        diag_println("mixing_state.enable_servo_double: %s", mixing_state.enable_servo_double ? "true:" : "false" );
+        diag_println("mixing_state.enable_max_steering: %s", mixing_state.enable_max_steering ? "true:" : "false" );
+        diag_println("mixing_state.weapon_mode: %d", mixing_state.weapon_mode );
+    
+    }
+    else // otherwise, invalid nvconfig.
+     diag_println("Did not find valid config in eeprom. Using defaults.");
 }
 
 void nvconfig_save()
