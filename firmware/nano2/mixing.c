@@ -26,7 +26,9 @@ void mixing_init()
     mixing_init_custom();
 }
 
-// Called by mixing_init to overwrite Malenki Nano prescribed defaults for custom configs
+// Called by mixing_init to overwrite Malenki Nano prescribed defaults for custom config defaults
+// any settings set here will be defaults when eeprom is wiped, overriding the malenki defaults
+// defined in mixing_init. 
 // Using a separate function instead of updating mixing_init makes future Malenki firmware
 // changes easier to merge and makes it easy to see what config is custom. Also opens door
 // to multiple custom configs

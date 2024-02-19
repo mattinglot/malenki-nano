@@ -126,14 +126,14 @@ static uint16_t scale_pulse(uint16_t pulse, uint8_t pwm_weapon_mode )
     }
 
     if ( pwm_weapon_mode == PWM_WEAPON_MODE_BLDC_ESC) {
-        // first subtract 1500 so 0 throttle position is 0 instead of 1500
-        pulse -= 1500;
+        // first add 1500 so 0 throttle position is 0 instead of -1500
+        pulse += 1500;
 
         // now add deadzone
         pulse = deadzone(pulse, BLDC_WEAPON_DEADZONE);
 
-        // now add back in 1500 so throttle is back to 1500 as "0"
-        pulse += 1500;
+        // now subtract 1500 so throttle is back to -1500 as "0"
+        pulse -= 1500;
     }
     
     // Scale pulse into TCD counts.
