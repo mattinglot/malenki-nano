@@ -21,6 +21,22 @@ void mixing_init()
     // right - this is what people expect - so they can wire them the
     // "same" way, and have the robot drive normally.
     mixing_state.invert_left = true;
+
+    // apply custom mixing configuration
+    mixing_init_custom();
+}
+
+// Called by mixing_init to overwrite Malenki Nano prescribed defaults for custom configs
+// Using a separate function instead of updating mixing_init makes future Malenki firmware
+// changes easier to merge and makes it easy to see what config is custom. Also opens door
+// to multiple custom configs
+void mixing_init_custom()
+{
+    // reset invert_left back to "old way" as thats how my bot electronics are soldered
+    mixing_state.invert_left = false;
+
+    // use BLDC mode for weapon 2
+    mixing_state.weapon2_mode = PWM_WEAPON_MODE_BLDC_ESC;
 }
 
 static int signedclamp(int n, int maxval)
@@ -30,7 +46,7 @@ static int signedclamp(int n, int maxval)
     return n;
 }
 
-static int deadzone(int n, int deadzone)
+int deadzone(int n, int deadzone)
 {
     if ((n < deadzone) && (n > (-deadzone))) {
         return 0;
@@ -73,7 +89,7 @@ static uint16_t apply_weapon_rules(int16_t throttle, int16_t steering, int16_t w
         }
     } else {
         // Default weapon mode
-        weapon = deadzone(weapon, 20);
+        weapon = deadzone(weapon, DC_WEAPON_DEADZONE);
         weapon = signedclamp(weapon, 200);
     }
     return weapon;
@@ -95,8 +111,8 @@ void mixing_drive_motors(int16_t throttle, int16_t steering, int16_t weapon, boo
     throttle = signedclamp(throttle, 100);  
     steering = signedclamp(steering, 100);  
     
-    throttle = deadzone(throttle, 10);    
-    steering = deadzone(steering, 10);    
+    throttle = deadzone(throttle, THROTTLE_DEADZONE);    
+    steering = deadzone(steering, STEERING_DEADZONE);    
     
     int left, right;
     if (mixing_state.enable_mixing) {

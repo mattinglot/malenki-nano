@@ -111,12 +111,28 @@ void weapons_init()
         TCD_CNTPRES_DIV32_gc; // further prescale by 32
 }
 
-static uint16_t scale_pulse(uint16_t pulse)
+// pulse: the pwm pulse we are scaling and apply weapon mode to
+// pwm_weapon_mode: the weapon mode we are using when scaling pulse, should be value of mixing_state.weapon2_mode or mixing_state_weapon3_mode
+static uint16_t scale_pulse(uint16_t pulse, uint8_t pwm_weapon_mode )
 {
-    if (mixing_state.enable_servo_double) {
+    // if servo doubling enabled and we are connected to a servo
+    // critical to not allow servo doubling when connected to a BLDC as this can result in unsafe condition
+    // due to sending wrong signals to BLDC ESC
+    if ( pwm_weapon_mode == PWM_WEAPON_MODE_SERVO && mixing_state.enable_servo_double) {
         // Effectively double the range of pulse widths
         pulse -= 1500;
         pulse *= 2;
+        pulse += 1500;
+    }
+
+    if ( pwm_weapon_mode == PWM_WEAPON_MODE_BLDC_ESC) {
+        // first subtract 1500 so 0 throttle position is 0 instead of 1500
+        pulse -= 1500;
+
+        // now add deadzone
+        pulse = deadzone(pulse, BLDC_WEAPON_DEADZONE);
+
+        // now add back in 1500 so throttle is back to 1500 as "0"
         pulse += 1500;
     }
     
@@ -130,8 +146,8 @@ static uint16_t scale_pulse(uint16_t pulse)
 
 void weapons_set(uint16_t pulse2, uint16_t pulse3)
 {
-    uint16_t p2 = scale_pulse(pulse2);
-    uint16_t p3 = scale_pulse(pulse3);
+    uint16_t p2 = scale_pulse(pulse2, mixing_state.weapon2_mode);
+    uint16_t p3 = scale_pulse(pulse3, mixing_state.weapon3_mode);
     TCD0.CMPASET = max_count - p2;
     TCD0.CMPBSET = max_count - p3;
     // Sync domain
