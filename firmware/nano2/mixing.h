@@ -17,7 +17,7 @@
 #define DC_WEAPON_DEADZONE 20
 #define THROTTLE_DEADZONE 10
 #define STEERING_DEADZONE 10
-#define BLDC_WEAPON_DEADZONE 50
+#define BLDC_WEAPON_DEADZONE 150
 
 typedef struct {
     uint8_t weapon_mode;

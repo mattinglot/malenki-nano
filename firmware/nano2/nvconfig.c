@@ -46,6 +46,8 @@ void nvconfig_load()
         diag_println("mixing_state.enable_servo_double: %s", mixing_state.enable_servo_double ? "true:" : "false" );
         diag_println("mixing_state.enable_max_steering: %s", mixing_state.enable_max_steering ? "true:" : "false" );
         diag_println("mixing_state.weapon_mode: %d", mixing_state.weapon_mode );
+        diag_println("mixing_state.weapon2_mode: %d", mixing_state.weapon2_mode );
+        diag_println("mixing_state.weapon3_mode: %d", mixing_state.weapon3_mode );
     
     }
     else // otherwise, invalid nvconfig.

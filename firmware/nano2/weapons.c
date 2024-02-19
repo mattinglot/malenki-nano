@@ -119,21 +119,20 @@ static uint16_t scale_pulse(uint16_t pulse, uint8_t pwm_weapon_mode )
     // critical to not allow servo doubling when connected to a BLDC as this can result in unsafe condition
     // due to sending wrong signals to BLDC ESC
     if ( pwm_weapon_mode == PWM_WEAPON_MODE_SERVO && mixing_state.enable_servo_double) {
-        // Effectively double the range of pulse widths
+        
+        // convert to 0 as the throttle center instead of 1500
         pulse -= 1500;
+        // Effectively double the range of pulse widths
         pulse *= 2;
+
+        // set throttle center back to 1500
         pulse += 1500;
     }
 
     if ( pwm_weapon_mode == PWM_WEAPON_MODE_BLDC_ESC) {
-        // first add 1500 so 0 throttle position is 0 instead of -1500
-        pulse += 1500;
-
+    
         // now add deadzone
         pulse = deadzone(pulse, BLDC_WEAPON_DEADZONE);
-
-        // now subtract 1500 so throttle is back to -1500 as "0"
-        pulse -= 1500;
     }
     
     // Scale pulse into TCD counts.
