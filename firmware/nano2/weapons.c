@@ -133,8 +133,11 @@ static uint16_t scale_pulse(uint16_t pulse, uint8_t pwm_weapon_mode )
     
         // now add deadzone
         pulse = deadzone(pulse, BLDC_WEAPON_DEADZONE);
+        diag_print('DZ mode');
     }
     
+    diag_println(" P:%d", pulse);
+
     // Scale pulse into TCD counts.
     // pulse should be 1000-2000 (us)
     // essentially divide by 6.4
