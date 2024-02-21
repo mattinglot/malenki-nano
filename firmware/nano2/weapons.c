@@ -115,6 +115,9 @@ void weapons_init()
 // pwm_weapon_mode: the weapon mode we are using when scaling pulse, should be value of mixing_state.weapon2_mode or mixing_state_weapon3_mode
 static uint16_t scale_pulse(uint16_t pulse, uint8_t pwm_weapon_mode )
 {
+    // pulse before transformation
+        diag_print("p:%d",pulse);
+
     // if servo doubling enabled and we are connected to a servo
     // critical to not allow servo doubling when connected to a BLDC as this can result in unsafe condition
     // due to sending wrong signals to BLDC ESC
@@ -129,14 +132,17 @@ static uint16_t scale_pulse(uint16_t pulse, uint8_t pwm_weapon_mode )
         pulse += 1500;
     }
 
+
     if ( pwm_weapon_mode == PWM_WEAPON_MODE_BLDC_ESC) {
         pulse -= 1000;
 
         // now add deadzone
-        pulse = deadzone(pulse, BLDC_WEAPON_DEADZONE);
+        //pulse = deadzone(pulse, BLDC_WEAPON_DEADZONE);
 
         pulse += 1000;
     }
+
+    diag_println(" - p:%d",pulse);
 
     // Scale pulse into TCD counts.
     // pulse should be 1000-2000 (us) 
