@@ -29,13 +29,14 @@ void mixing_init()
 // Called by mixing_init to overwrite Malenki Nano prescribed defaults for custom config defaults
 // any settings set here will be defaults when eeprom is wiped, overriding the malenki defaults
 // defined in mixing_init. 
+// 
 // Using a separate function instead of updating mixing_init makes future Malenki firmware
 // changes easier to merge and makes it easy to see what config is custom. Also opens door
 // to multiple custom configs
 void mixing_init_custom()
 {
     // reset invert_left back to "old way" as thats how my bot electronics are soldered
-    mixing_state.invert_left = false;
+    // mixing_state.invert_left = false;
 
     // use BLDC mode for weapon 2
     mixing_state.weapon2_mode = PWM_WEAPON_MODE_BLDC_ESC;
