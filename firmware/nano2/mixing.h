@@ -17,8 +17,8 @@
 #define DC_WEAPON_DEADZONE 20
 #define THROTTLE_DEADZONE 10
 #define STEERING_DEADZONE 10
-// note: BLDC ESC pulse range for a weapon is 500, so for 5% want 25
-#define BLDC_WEAPON_DEADZONE 25
+// note: BLDC ESC pulse range for a weapon is 1000 (1000-2000), so for 5% want 50
+#define BLDC_WEAPON_DEADZONE 50
 
 typedef struct {
     uint8_t weapon_mode;

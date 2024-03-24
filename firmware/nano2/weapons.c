@@ -116,7 +116,7 @@ void weapons_init()
 static uint16_t scale_pulse(uint16_t pulse, uint8_t pwm_weapon_mode )
 {
     // pulse before transformation
-        diag_print("p:%d",pulse);
+        //diag_print("p:%d",pulse);
 
     // if servo doubling enabled and we are connected to a servo
     // critical to not allow servo doubling when connected to a BLDC as this can result in unsafe condition
@@ -137,12 +137,12 @@ static uint16_t scale_pulse(uint16_t pulse, uint8_t pwm_weapon_mode )
         pulse -= 1000;
 
         // now add deadzone
-        //pulse = deadzone(pulse, BLDC_WEAPON_DEADZONE);
+        pulse = deadzone(pulse, BLDC_WEAPON_DEADZONE);
 
         pulse += 1000;
     }
 
-    diag_println(" - p:%d",pulse);
+    //diag_println(" - p:%d",pulse);
 
     // Scale pulse into TCD counts.
     // pulse should be 1000-2000 (us) 
